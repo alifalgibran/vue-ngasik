@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li><a href="#" @click="dafUsers()">daftar user</a></li>
+            <li><a href="#" @click="dafReq()">daftar request</a></li>
+            <li><a href="#" @click="dafClass()">daftar kelas</a></li>
+        </ul>
+        <!-- <transition
+            name="custom-classes-transition"
+            enter-active-class="animated bounceInDown"
+            leave-active-class="animated bounceOutRight"
+        > -->
+        <div class="contaner">
+        <div class="col-7" style="float: left;">
+            <component  :is="currentView" class="animated" keep-alive transition="custom-fade"></component>
+        </div>
+        <div class="col-5"  style="float: right;" >
+            <component :is="currentView2" class="animated" keep-alive transition="custom-fade"></component>
+        </div>
+        </div>
+        
+        <!-- </transition> -->
+    </div>
+
+
+    <template id='daftar-user-template'>
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Alamat</th>
+                        <th scope="col">No. Telp</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(halo,index) in fb">
+                        <th>{{ index+1 }}</th>
+                        <td>{{halo.name}}</td>
+                        <td>{{halo.alamat}}</td>
+                        <td>{{halo.noTelp}}</td>
+                      </tr>
+                    <!-- </tr>                     -->
+                    </tbody>
+                  </table>
+    </template>
+
+    <template id='daftar-user-template2'>
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Foto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(cek,index) in pp">
+                        <td>
+                            <img height="50" width="50" v-bind:src="cek"> 
+                        </td>
+                    </tr>
+                    <!-- </tr>                     -->
+                    </tbody>
+                  </table>
+            
+  </template> 
+
+    <template id="daftar-request-template">
+        <ul>
+            <li>haha</li>
+            <li>hihi</li>
+            <li>huhu</li>
+        </ul>
+    </template>
+    <template id="daftar-kelas-template">
+            <ul>
+                <li>we</li>
+                <li>hihdi</li>
+                <li>huasdhu</li>
+            </ul>
+        </template>
+</body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+<script>
+    var config =  {
+        apiKey: "AIzaSyDewBM9i0kEwgpl-plCw2zBh17_qO_xRoo",
+        authDomain: "ngasik-213d8.firebaseapp.com",
+        databaseURL: "https://ngasik-213d8.firebaseio.com",
+        projectId: "ngasik-213d8",
+        storageBucket: "ngasik-213d8.appspot.com",
+        messagingSenderId: "188332240090"
+    };
+
+   firebase.initializeApp(config);
+   var db = firebase.firestore();
+   
+   var pp = [];
+   var datanya = [];
+   db.collection("users").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                   // console.log(`${doc.id} => ${doc.data()}`);
+                    datanya.push(doc.data());
+                });
+            });
+   //console.log(datanya)
+   var urls = [];
+   Vue.component('daftar-user',{
+       template: '#daftar-user-template',
+       data: function(){
+           return{
+              fb: datanya,
+               pp: urls
+           }
+       }
+   });
+
+   Vue.component('daftar-user2',{
+        template: '#daftar-user-template2',
+        data: function(){
+            return{
+                fb: datanya,
+                pp: urls
+            }
+        }
+   })
+
+   Vue.component('daftar-request',{
+       template: '#daftar-request-template',
+   });
+
+   Vue.component('daftar-kelas',{
+       template: '#daftar-kelas-template',
+   });
+
+//    Vue.transition('custom-fade',{
+//        enterClass: 'bounceInDown',
+//        leaveClass: 'fadeOutUp',
+//    });
+
+    var vm = new Vue({
+            el: '#app',
+            data:{
+                fb: datanya,
+                hai: "",
+                currentView: 'daftar-kelas',
+                currentView2: ''
+            },
+            methods:{
+                foto: function(foto = "sd"){
+                  console.log(foto);
+                },
+                dafUsers(){
+                    this.currentView = 'daftar-user'
+                    this.currentView2 = 'daftar-user2'
+                    var i;
+                    for(i = 0 ; i < datanya.length ; i++){
+                        pp.push(datanya[i].profilePicturePath);
+                        var storage = firebase.storage();
+                        var storageRef = storage.ref();
+                        console.log(datanya[i].profilePicturePath)
+                        ///Qa0tYHrtaIZVdVUkBXQcwx4IRV83/profilePictures/096fee62-5989-3773-8833-9893c603c51e
+                        var photoPath = storageRef.child(datanya[i].profilePicturePath);
+
+                        if(photoPath != "" || photoPath != null){
+                            photoPath.getDownloadURL().then(function(url){
+                            //document.querySelector('img').src = url;
+                            //console.log(url)
+                            urls.push(url)
+                            //console.log('urlnya dong' + datanya)
+                        });
+                        }
+                        urls = []
+                    }
+                   // urls = [];
+                },
+                dafReq(){
+                    this.currentView = 'daftar-request'
+                    this.currentView2 = ''
+                },
+                dafClass(){
+                    this.currentView = 'daftar-kelas'
+                    this.currentView2 = ''
+                }
+            }
+    });
+    
+</script>
+</html>
