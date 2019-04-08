@@ -1,34 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Admin - Ngaji Asik!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="https://unpkg.com/vue@2.4.3/dist/vue.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-helper.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-gallery.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-gallery-fullscreen.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/blueimp-gallery@2.27.0/css/blueimp-gallery.min.css">
+    <script type="text/javascript" src="vue-gallery.js"></script>
+
+  <style>
+  .image {
+    float: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 1px solid #ebebeb;
+    margin: 5px;
+  }
+  </style>
 </head>
 <body>
     <div id="app">
-        <ul>
+            <div class="card text-center">
+                    <div class="card-header">
+                      <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link" href="#" @click="dafUsers()">daftar user</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#" @click="dafReq()">daftar request</a>
+                        </li>
+                        <li class="nav-item">
+                          <!-- <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+                          <a class="nav-link " href="#" @click="dafClass()">daftar kelas</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="card-body">
+                        
+                        <div class="contaner">
+                        <div class="col-7" style="float: left;">
+                            <component  :is="currentView" class="animated" keep-alive transition="custom-fade"></component>
+                        </div>
+                        <div class="col-5"  style="float: right;" >
+                            <component :is="currentView2" class="animated" keep-alive transition="custom-fade"></component>
+                        </div>
+                        </div>
+                        
+                    </div>
+                  </div>
+        <!-- <ul>
             <li><a href="#" @click="dafUsers()">daftar user</a></li>
             <li><a href="#" @click="dafReq()">daftar request</a></li>
             <li><a href="#" @click="dafClass()">daftar kelas</a></li>
-        </ul>
-        <!-- <transition
-            name="custom-classes-transition"
-            enter-active-class="animated bounceInDown"
-            leave-active-class="animated bounceOutRight"
-        > -->
-        <div class="contaner">
-        <div class="col-7" style="float: left;">
-            <component  :is="currentView" class="animated" keep-alive transition="custom-fade"></component>
-        </div>
-        <div class="col-5"  style="float: right;" >
-            <component :is="currentView2" class="animated" keep-alive transition="custom-fade"></component>
-        </div>
-        </div>
+        </ul> -->
         
-        <!-- </transition> -->
     </div>
-
 
     <template id='daftar-user-template'>
             <table class="table">
@@ -44,7 +76,7 @@
                       <tr v-for="(halo,index) in fb">
                         <th>{{ index+1 }}</th>
                         <td>{{halo.name}}</td>
-                        <td>{{halo.alamat}}</td>
+                        <td>{{halo.alasan}}</td>
                         <td>{{halo.noTelp}}</td>
                       </tr>
                     <!-- </tr>                     -->
@@ -62,22 +94,78 @@
                     <tbody>
                     <tr v-for="(cek,index) in pp">
                         <td>
+                            <a class="image-popup-no-margins" href="http://farm4.staticflickr.com/3721/9207329484_ba28755ec4_o.jpg">
+                              <img src="http://farm4.staticflickr.com/3721/9207329484_ba28755ec4_o.jpg" width="107" height="75">
+                            </a>
                             <img height="50" width="50" v-bind:src="cek"> 
                         </td>
+                        <template>
+                          <div>
+                            <gallery :images="images" :index="index" @close="index = null"></gallery>
+                            <div
+                              class="image"
+                              v-for="(image, imageIndex) in images"
+                              :key="imageIndex"
+                              @click="index = imageIndex"
+                              :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
+                            ></div>
+                          </div>
+                        </template>                        
                     </tr>
-                    <!-- </tr>                     -->
                     </tbody>
                   </table>
             
   </template> 
 
     <template id="daftar-request-template">
-        <ul>
-            <li>haha</li>
-            <li>hihi</li>
-            <li>huhu</li>
-        </ul>
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Alasan</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(halo2,index) in fb2">
+                        <th>{{ index+1 }}</th>
+                        <td>{{halo2.name}}</td>
+                        <td>{{halo2.alasan}}</td>
+                        <td>{{halo2.status}}</td>
+                      </tr>
+                      
+                    <!-- </tr>                     -->
+                    </tbody>
+                  </table>
     </template>
+
+    <template id='daftar-request-template2'>
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Foto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(cek,index) in pp2">
+                        <td>
+                            <gallery :images="images" :index="index" @close="index = null"></gallery>
+                            <div
+                              class="image"
+                              v-for="image, imageIndex in images"
+                              @click="index = imageIndex"
+                              :style="{ backgroundImage: 'url(' + image.href + ')', width: '300px', height: '200px' }"
+                            ></div>
+                            <img height="50" width="50" v-bind:src="cek"> 
+                        </td>
+                    </tr>
+                    <!-- </tr>                     -->
+                    </tbody>
+            </table>
+            
+  </template> 
+
     <template id="daftar-kelas-template">
             <ul>
                 <li>we</li>
@@ -93,7 +181,9 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+
 <script>
+    // $("a.grouped_elements").fancybox();
     var config =  {
         apiKey: "AIzaSyDewBM9i0kEwgpl-plCw2zBh17_qO_xRoo",
         authDomain: "ngasik-213d8.firebaseapp.com",
@@ -104,23 +194,24 @@
     };
 
    firebase.initializeApp(config);
-   var db = firebase.firestore();
-   
+   var dbUser = firebase.firestore();
+
    var pp = [];
+   var datanyaForStorage = [];
    var datanya = [];
-   db.collection("users").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                   // console.log(`${doc.id} => ${doc.data()}`);
-                    datanya.push(doc.data());
-                });
-            });
+
+   var pp = [];
+   var datanyaForStorageReq = [];
+   var datanyaReq = [];
+   
    //console.log(datanya)
    var urls = [];
+   var urlsReq = [];
    Vue.component('daftar-user',{
        template: '#daftar-user-template',
        data: function(){
            return{
-              fb: datanya,
+              fb: datanyaForStorage,
                pp: urls
            }
        }
@@ -131,13 +222,56 @@
         data: function(){
             return{
                 fb: datanya,
-                pp: urls
+                pp: urls,
+                
             }
         }
-   })
+   });
 
    Vue.component('daftar-request',{
        template: '#daftar-request-template',
+        data: function(){
+            return{
+                fb2: datanyaReq,
+                pp2: urlsReq
+            }
+        }
+   });
+
+   Vue.component('daftar-request2',{
+       template: '#daftar-request-template2',
+        data: function(){
+            return{
+                fb2: datanyaReq,
+                pp2: urlsReq,
+                images: [
+                {
+                  title: '400x400',
+                  description: '400 x 400 White',
+                  href: 'https://dummyimage.com/400/ffffff/000000',
+                },
+                {
+                  title: '400x400',
+                  description: '400 x 400 White',
+                  href: 'https://dummyimage.com/400/ffffff/000000',
+                },
+                {
+                  title: '400x400',
+                  description: '400 x 400 Black',
+                  href: 'https://dummyimage.com/400/000000/ffffff',
+                },
+                {
+                  title: '400x400',
+                  description: '400 x 400 Black',
+                  href: 'https://dummyimage.com/400/000000/ffffff',
+                },
+              ],
+        index: null
+            }
+        },
+        components: {
+          'gallery': VueGallery
+        }
    });
 
    Vue.component('daftar-kelas',{
@@ -152,7 +286,6 @@
     var vm = new Vue({
             el: '#app',
             data:{
-                fb: datanya,
                 hai: "",
                 currentView: 'daftar-kelas',
                 currentView2: ''
@@ -164,6 +297,14 @@
                 dafUsers(){
                     this.currentView = 'daftar-user'
                     this.currentView2 = 'daftar-user2'
+                    dbUser.collection("users").get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                        // console.log(`${doc.id} => ${doc.data()}`);
+                            datanya.push(doc.data());
+                            datanyaForStorage.push(doc.data());
+                        });
+                    });
+                    
                     var i;
                     for(i = 0 ; i < datanya.length ; i++){
                         pp.push(datanya[i].profilePicturePath);
@@ -181,13 +322,46 @@
                             //console.log('urlnya dong' + datanya)
                         });
                         }
-                        urls = []
+                        urls = [];
+                        datanyaForStorage = [];
                     }
+                    datanya = []
+                    
                    // urls = [];
                 },
                 dafReq(){
                     this.currentView = 'daftar-request'
-                    this.currentView2 = ''
+                    this.currentView2 = 'daftar-request2'
+
+                    dbUser.collection("requestPengajar").get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                        // console.log(`${doc.id} => ${doc.data()}`);
+                            datanyaReq.push(doc.data());
+                            datanyaForStorageReq.push(doc.data());
+                        });
+                    });
+                    
+                    var i;
+                    for(i = 0 ; i < datanyaReq.length ; i++){
+                        pp.push(datanyaReq[i].newestPhotoPath);
+                        var storage = firebase.storage();
+                        var storageRef = storage.ref();
+                        console.log(datanyaReq[i].newestPhotoPath)
+                        ///Qa0tYHrtaIZVdVUkBXQcwx4IRV83/profilePictures/096fee62-5989-3773-8833-9893c603c51e
+                        var photoPath = storageRef.child(datanyaReq[i].newestPhotoPath);
+
+                        if(photoPath != "" || photoPath != null){
+                            photoPath.getDownloadURL().then(function(url){
+                            //document.querySelector('img').src = url;
+                            //console.log(url)
+                            urlsReq.push(url)
+                            console.log('urlnya dong' + url)
+                        });
+                        }
+                        urlsReq = [];
+                        datanyaForStorageReq = [];
+                    }
+                    datanyaReq = [];
                 },
                 dafClass(){
                     this.currentView = 'daftar-kelas'
@@ -196,5 +370,6 @@
             }
     });
     
+
 </script>
 </html>
