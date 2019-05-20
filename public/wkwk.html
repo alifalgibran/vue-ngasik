@@ -7,51 +7,61 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+    .lightbox {}
+    .lightbox__thumbnail {}
+    .lightbox__thumbnail img {}
+    .lightbox__close {}
+    .lightbox__arrow--invisible {}
+    .lightbox__element {}
+    .lightbox__arrow {}
+    .lightbox__arrow svg {}
+    .lightbox__image {}
+    .lightbox__image img {}
     </style>
+    <link rel="stylesheet" type="text/css" media="screen" href="vue-pure-lightbox.css">
 </head>
 <body>
-    <template>
-        <div>
-          <gallery :images="images" :index="index" @close="index = null"></gallery>
-          <div
-            class="image"
-            v-for="(image, imageIndex) in images"
-            :key="imageIndex"
-            @click="index = imageIndex"
-            :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
-          ></div>
-        </div>
-      </template>
-      
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.pack.js"></script>
+    <div id="app">
+        <VuePureLightbox
+        thumbnail="/path/to/thumbnail.jpg"
+        :images="['/path/to/image1.jpg', '/path/to/image1.jpg']"
+      />
+      </div>
+
+
+      <!-- <template>
+  <div>
+    <gallery :images="images" :index="index" @close="index = null"></gallery>
+    <div
+      class="image"
+      v-for="(image, imageIndex) in images"
+      :key="imageIndex"
+      @click="index = imageIndex"
+      :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
+    ></div>
+  </div>
+</template> -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-pure-lightbox/dist/vue-pure-lightbox.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.pack.js"></script>
 </body>
 <script>
 
-$(document).ready(function() {
+  // Vue.use(Lightbox)
+  new Vue({
+    components: {
+      'vue-pure-lightbox': window.VuePureLightbox,
+    }
+  }).$mount('#app')
 
-/* This is basic - uses default settings */
+    // new Vue({
+    //   components:{
+    //           'vue-pure-lightbox': window.VuePureLightbox
+    //         }
+    // })
 
-$("a#single_image").fancybox();
-
-/* Using custom settings */
-
-$("a#inline").fancybox({
-    'hideOnContentClick': true
-});
-
-/* Apply fancybox to multiple items */
-
-$("a.group").fancybox({
-    'transitionIn'	:	'elastic',
-    'transitionOut'	:	'elastic',
-    'speedIn'		:	600, 
-    'speedOut'		:	200, 
-    'overlayShow'	:	false
-});
-
-});
-$("a.grouped_elements").fancybox();
 
 </script>
 </html>

@@ -5,12 +5,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta rel="stylesheet" href="https://unpkg.com/vue-pure-lightbox/dist/vue-pure-lightbox.css">
+    <style src="vue-pure-lightbox/dist/VuePureLightbox.css"></style>
 
     <script type="text/javascript" src="https://unpkg.com/vue@2.4.3/dist/vue.js"></script>
+    
     <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-helper.js"></script>
     <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-gallery.js"></script>
     <script type="text/javascript" src="https://unpkg.com/blueimp-gallery@2.27.0/js/blueimp-gallery-fullscreen.js"></script>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/blueimp-gallery@2.27.0/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="vue-pure-lightbox.css">    
     <script type="text/javascript" src="vue-gallery.js"></script>
 
   <style>
@@ -42,16 +46,12 @@
                       </ul>
                     </div>
                     <div class="card-body">
-                        
                         <div class="contaner">
-                        <div class="col-7" style="float: left;">
+                        <div class="col-9" style="float: left;">
                             <component  :is="currentView" class="animated" keep-alive transition="custom-fade"></component>
                         </div>
-                        <div class="col-5"  style="float: right;" >
-                            <component :is="currentView2" class="animated" keep-alive transition="custom-fade"></component>
-                        </div>
-                        </div>
-                        
+                      </div>
+
                     </div>
                   </div>
         <!-- <ul>
@@ -70,52 +70,31 @@
                         <th scope="col">Nama</th>
                         <th scope="col">Alamat</th>
                         <th scope="col">No. Telp</th>
+                        <th scope="col">Foto</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(halo,index) in fb">
                         <th>{{ index+1 }}</th>
                         <td>{{halo.name}}</td>
-                        <td>{{halo.alasan}}</td>
+                        <td>{{halo.alamat}}</td>
                         <td>{{halo.noTelp}}</td>
+                        <td>
+                            <lightbox
+                            style="width: 3em; object-fit: cover"
+                            :thumbnail = "halo.profilePicturePath"
+                            :images="[
+                              halo.profilePicturePath,
+                            ]"
+                          >
+                            <lightbox-default-loader slot="loader"/>
+                          </lightbox>
+                        </td>
                       </tr>
                     <!-- </tr>                     -->
                     </tbody>
                   </table>
     </template>
-
-    <template id='daftar-user-template2'>
-            <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Foto</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(cek,index) in pp">
-                        <td>
-                            <a class="image-popup-no-margins" href="http://farm4.staticflickr.com/3721/9207329484_ba28755ec4_o.jpg">
-                              <img src="http://farm4.staticflickr.com/3721/9207329484_ba28755ec4_o.jpg" width="107" height="75">
-                            </a>
-                            <img height="50" width="50" v-bind:src="cek"> 
-                        </td>
-                        <template>
-                          <div>
-                            <gallery :images="images" :index="index" @close="index = null"></gallery>
-                            <div
-                              class="image"
-                              v-for="(image, imageIndex) in images"
-                              :key="imageIndex"
-                              @click="index = imageIndex"
-                              :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
-                            ></div>
-                          </div>
-                        </template>                        
-                    </tr>
-                    </tbody>
-                  </table>
-            
-  </template> 
 
     <template id="daftar-request-template">
             <table class="table">
@@ -125,21 +104,40 @@
                         <th scope="col">Nama</th>
                         <th scope="col">Alasan</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Foto Tebaru</th>
+                        <th scope="col">Portofolio</th>
+                        <th scope="col">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(halo2,index) in fb2">
                         <th>{{ index+1 }}</th>
-                        <td>{{halo2.name}}</td>
-                        <td>{{halo2.alasan}}</td>
-                        <td>{{halo2.status}}</td>
+                        <td>{{halo2.data().name}}</td>
+                        <td>{{halo2.data().alasan}}</td>
+                        <td>{{halo2.data().status}}</td>
+                        <td>
+                            <VuePureLightbox
+                            style="width: 5em; object-fit: cover"
+                            :thumbnail = "halo2.data().newestPhotoPath"
+                            :images="[
+                              halo2.data().newestPhotoPath,
+                            ]"
+                          >
+                            <!-- <lightbox-default-loader slot="loader"/> -->
+                          </VuePureLightbox>
+                        </td>
+                        <td><a :href="halo2.portofolioPath" target="_blank">Buka</a></td>
+                        <td>
+                            <a href="#" @click="updatePengajar(halo2.id)"> <button type="button" class="btn btn-success">Terima</button></a>
+                            <a href="#"> <button type="button" class="btn btn-danger">Batal</button></a>
+                        </td>
                       </tr>
                       
                     <!-- </tr>                     -->
                     </tbody>
                   </table>
     </template>
-
+<!-- 
     <template id='daftar-request-template2'>
             <table class="table">
                     <thead>
@@ -150,21 +148,19 @@
                     <tbody>
                     <tr v-for="(cek,index) in pp2">
                         <td>
-                            <gallery :images="images" :index="index" @close="index = null"></gallery>
-                            <div
-                              class="image"
-                              v-for="image, imageIndex in images"
-                              @click="index = imageIndex"
-                              :style="{ backgroundImage: 'url(' + image.href + ')', width: '300px', height: '200px' }"
-                            ></div>
-                            <img height="50" width="50" v-bind:src="cek"> 
+                          <div>
+                            <img height="30" width="30" v-bind:src="cek" style="float: left">
+                        </td>
+                        <td>
+                            
+                          </div>
+                            
                         </td>
                     </tr>
-                    <!-- </tr>                     -->
                     </tbody>
             </table>
             
-  </template> 
+  </template>  -->
 
     <template id="daftar-kelas-template">
             <ul>
@@ -181,7 +177,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
-
+    <!-- <script src="https://unpkg.com/vue-pure-lightbox/dist/vue-pure-lightbox.js"></script> -->
 <script>
     // $("a.grouped_elements").fancybox();
     var config =  {
@@ -207,14 +203,21 @@
    //console.log(datanya)
    var urls = [];
    var urlsReq = [];
+
+  //  Vue.use(Lightbox);
+
    Vue.component('daftar-user',{
        template: '#daftar-user-template',
        data: function(){
            return{
-              fb: datanyaForStorage,
+               fb: datanyaForStorage,
                pp: urls
            }
-       }
+       },
+        components: {
+          'gallery': VueGallery,
+          'vue-pure-lightbox': window.VuePureLightbox
+        },
    });
 
    Vue.component('daftar-user2',{
@@ -223,9 +226,11 @@
             return{
                 fb: datanya,
                 pp: urls,
-                
             }
-        }
+        },
+        components: {
+          'gallery': VueGallery
+        },
    });
 
    Vue.component('daftar-request',{
@@ -233,55 +238,43 @@
         data: function(){
             return{
                 fb2: datanyaReq,
-                pp2: urlsReq
-            }
-        }
-   });
-
-   Vue.component('daftar-request2',{
-       template: '#daftar-request-template2',
-        data: function(){
-            return{
-                fb2: datanyaReq,
                 pp2: urlsReq,
-                images: [
-                {
-                  title: '400x400',
-                  description: '400 x 400 White',
-                  href: 'https://dummyimage.com/400/ffffff/000000',
-                },
-                {
-                  title: '400x400',
-                  description: '400 x 400 White',
-                  href: 'https://dummyimage.com/400/ffffff/000000',
-                },
-                {
-                  title: '400x400',
-                  description: '400 x 400 Black',
-                  href: 'https://dummyimage.com/400/000000/ffffff',
-                },
-                {
-                  title: '400x400',
-                  description: '400 x 400 Black',
-                  href: 'https://dummyimage.com/400/000000/ffffff',
-                },
-              ],
-        index: null
+                idnya: "",
+                pengajar: null
             }
         },
+        name:'daftarRequests',
         components: {
           'gallery': VueGallery
-        }
+        },
+         methods:{
+         updatePengajar(pengajar){
+            //this.idnya = pengajar.id
+             console.log(pengajar)
+
+            washingtonRef = dbUser.collection("requestPengajar").doc(pengajar);
+            // Set the "capital" field of the city 'DC'
+            return washingtonRef.update({
+                status: "pengajar",
+                statusDiterima: "sukses"
+            })
+            .then(function() {
+                console.log("Document successfully updated!");
+            })
+            .catch(function(error) {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+
+         }
+       }
+        
    });
+
 
    Vue.component('daftar-kelas',{
        template: '#daftar-kelas-template',
    });
-
-//    Vue.transition('custom-fade',{
-//        enterClass: 'bounceInDown',
-//        leaveClass: 'fadeOutUp',
-//    });
 
     var vm = new Vue({
             el: '#app',
@@ -290,83 +283,41 @@
                 currentView: 'daftar-kelas',
                 currentView2: ''
             },
+            components:{
+              'vue-pure-lightbox': window.VuePureLightbox
+            },
             methods:{
                 foto: function(foto = "sd"){
                   console.log(foto);
                 },
                 dafUsers(){
                     this.currentView = 'daftar-user'
-                    this.currentView2 = 'daftar-user2'
                     dbUser.collection("users").get().then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
-                        // console.log(`${doc.id} => ${doc.data()}`);
-                            datanya.push(doc.data());
-                            datanyaForStorage.push(doc.data());
+                           datanyaForStorage.push(doc.data());
+                           console.log(doc.data().name);
                         });
                     });
                     
-                    var i;
-                    for(i = 0 ; i < datanya.length ; i++){
-                        pp.push(datanya[i].profilePicturePath);
-                        var storage = firebase.storage();
-                        var storageRef = storage.ref();
-                        console.log(datanya[i].profilePicturePath)
-                        ///Qa0tYHrtaIZVdVUkBXQcwx4IRV83/profilePictures/096fee62-5989-3773-8833-9893c603c51e
-                        var photoPath = storageRef.child(datanya[i].profilePicturePath);
+                    datanyaForStorage = []
 
-                        if(photoPath != "" || photoPath != null){
-                            photoPath.getDownloadURL().then(function(url){
-                            //document.querySelector('img').src = url;
-                            //console.log(url)
-                            urls.push(url)
-                            //console.log('urlnya dong' + datanya)
-                        });
-                        }
-                        urls = [];
-                        datanyaForStorage = [];
-                    }
-                    datanya = []
-                    
-                   // urls = [];
                 },
                 dafReq(){
                     this.currentView = 'daftar-request'
-                    this.currentView2 = 'daftar-request2'
+                    // this.currentView2 = 'daftar-request2'
 
                     dbUser.collection("requestPengajar").get().then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
-                        // console.log(`${doc.id} => ${doc.data()}`);
-                            datanyaReq.push(doc.data());
-                            datanyaForStorageReq.push(doc.data());
+                            datanyaReq.push(doc);
                         });
                     });
-                    
-                    var i;
-                    for(i = 0 ; i < datanyaReq.length ; i++){
-                        pp.push(datanyaReq[i].newestPhotoPath);
-                        var storage = firebase.storage();
-                        var storageRef = storage.ref();
-                        console.log(datanyaReq[i].newestPhotoPath)
-                        ///Qa0tYHrtaIZVdVUkBXQcwx4IRV83/profilePictures/096fee62-5989-3773-8833-9893c603c51e
-                        var photoPath = storageRef.child(datanyaReq[i].newestPhotoPath);
-
-                        if(photoPath != "" || photoPath != null){
-                            photoPath.getDownloadURL().then(function(url){
-                            //document.querySelector('img').src = url;
-                            //console.log(url)
-                            urlsReq.push(url)
-                            console.log('urlnya dong' + url)
-                        });
-                        }
-                        urlsReq = [];
-                        datanyaForStorageReq = [];
-                    }
-                    datanyaReq = [];
+                     datanyaReq = [];
                 },
                 dafClass(){
                     this.currentView = 'daftar-kelas'
                     this.currentView2 = ''
-                }
+                },
+                
             }
     });
     
